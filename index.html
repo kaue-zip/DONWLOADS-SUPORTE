@@ -5,12 +5,7 @@
   <title>Downloads Suporte - Loja Soluções</title>
   <style>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Segoe UI", Arial, sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Segoe UI", Arial, sans-serif; }
 
     body {
       background: #000;
@@ -24,59 +19,160 @@
       position: relative;
     }
 
-    /* ===== FUNDO COM PLANETAS ===== */
-    .background-planets {
+    /* ===== ESTRELAS ===== */
+    .stars {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      z-index: -2;
+      inset: 0;
+      z-index: -5;
+      pointer-events: none;
     }
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.15;
+      animation: blink 2.5s infinite ease-in-out;
+      will-change: transform, opacity;
+    }
+    @keyframes blink {
+      0% { opacity: 0.05; transform: scale(0.9); }
+      50% { opacity: 0.9; transform: scale(1.2); }
+      100% { opacity: 0.05; transform: scale(0.9); }
+    }
+
+    /* ===== VIA LÁCTEA (faixa animada) ===== */
+    .milkyway {
+      position: fixed;
+      left: -25%;
+      top: -10%;
+      width: 150%;
+      height: 40%;
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.02) 0%,
+        rgba(255,255,255,0.06) 20%,
+        rgba(255,255,255,0.12) 50%,
+        rgba(255,255,255,0.06) 80%,
+        rgba(255,255,255,0.02) 100%);
+      filter: blur(30px) saturate(1.1);
+      transform: rotate(-12deg);
+      opacity: 0.55;
+      z-index: -4;
+      animation: milkyMove 40s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes milkyMove {
+      0% { transform: translateX(0) rotate(-12deg) scaleX(1); }
+      50% { transform: translateX(-6%) rotate(-12deg) scaleX(1.02); }
+      100% { transform: translateX(0) rotate(-12deg) scaleX(1); }
+    }
+
+    /* ===== PLANETAS (movimento diagonal) ===== */
+    .background-planets { position: fixed; inset: 0; z-index: -3; pointer-events: none; }
 
     .planet {
       position: absolute;
       border-radius: 50%;
-      background: radial-gradient(circle, #ff6600 20%, rgba(255, 102, 0, 0.1) 70%, transparent 100%);
-      opacity: 0.6;
-      animation: pulse 6s infinite ease-in-out, float 12s infinite linear;
-      filter: blur(1px);
-      z-index: -1;
+      filter: blur(0.8px);
+      opacity: 0.75;
+      will-change: transform;
     }
 
+    /* cores/texturas diferentes */
+    .planet.p1 { width: 160px; height: 160px; left: 4%; top: 8%;
+      background: radial-gradient(circle at 30% 30%, #ff9a4d 10%, #ff6a00 40%, rgba(255,110,30,0.08) 70%); 
+      animation: diag1 28s linear infinite; }
+    .planet.p2 { width: 110px; height: 110px; right: 6%; top: 22%;
+      background: radial-gradient(circle at 30% 25%, #8ad1ff 10%, #3c9dff 40%, rgba(60,157,255,0.06) 70%);
+      animation: diag2 36s linear infinite reverse; transform-origin: center; }
+    .planet.p3 { width: 200px; height: 200px; left: 18%; bottom: 6%;
+      background: radial-gradient(circle at 35% 30%, #d98cff 10%, #b43cff 40%, rgba(180,60,255,0.06) 70%);
+      animation: diag3 44s linear infinite; }
+    .planet.p4 { width: 80px; height: 80px; right: 12%; bottom: 12%;
+      background: radial-gradient(circle at 30% 30%, #7bffb2 10%, #00d28a 40%, rgba(0,210,138,0.06) 70%);
+      animation: diag4 24s linear infinite reverse; }
+
+    /* diagonal keyframes - move across diagonals */
+    @keyframes diag1 {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+      50%  { transform: translate(30vw,-12vh) rotate(18deg) scale(1.05); }
+      100% { transform: translate(0,0) rotate(0deg) scale(1); }
+    }
+    @keyframes diag2 {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+      50%  { transform: translate(-28vw, 10vh) rotate(-22deg) scale(1.08); }
+      100% { transform: translate(0,0) rotate(0deg) scale(1); }
+    }
+    @keyframes diag3 {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+      50%  { transform: translate(36vw,-18vh) rotate(14deg) scale(1.06); }
+      100% { transform: translate(0,0) rotate(0deg) scale(1); }
+    }
+    @keyframes diag4 {
+      0%   { transform: translate(0,0) rotate(0deg) scale(1); }
+      50%  { transform: translate(-22vw, 14vh) rotate(-12deg) scale(1.04); }
+      100% { transform: translate(0,0) rotate(0deg) scale(1); }
+    }
+
+    /* small orbit ring (optional) */
     .planet.orbit::before {
       content: '';
       position: absolute;
-      top: -20px;
-      left: -20px;
-      width: 140%;
-      height: 140%;
-      border: 1px dashed rgba(255, 102, 0, 0.4);
+      inset: -18px;
       border-radius: 50%;
-      animation: rotate 18s linear infinite;
+      border: 1px dashed rgba(255,255,255,0.03);
+      pointer-events: none;
     }
 
-    .p1 { width: 150px; height: 150px; left: 5%; top: 12%; }
-    .p2 { width: 90px; height: 90px; right: 8%; top: 25%; }
-    .p3 { width: 190px; height: 190px; left: 15%; bottom: 5%; }
-    .p4 { width: 70px; height: 70px; right: 12%; bottom: 10%; }
-
-    @keyframes pulse {
-      0% { transform: scale(0.9); opacity: 0.55; }
-      50% { transform: scale(1.1); opacity: 0.9; }
-      100% { transform: scale(0.9); opacity: 0.55; }
+    /* ===== COMETAS ===== */
+    .comet {
+      position: fixed;
+      top: -10vh;
+      left: -20vw;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 8px rgba(255,255,255,0.9);
+      z-index: -1;
+      opacity: 0.95;
+      transform: rotate(-20deg);
+      pointer-events: none;
+    }
+    .comet::before {
+      /* tail */
+      content: "";
+      position: absolute;
+      right: 6px;
+      top: -2px;
+      width: 220px;
+      height: 6px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.0) 0%, rgba(255,255,255,0.25) 20%, rgba(255,255,255,0.06) 60%, rgba(255,255,255,0.0) 100%);
+      filter: blur(4px);
+      transform-origin: left center;
+      opacity: 0.85;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(-18px); }
-      100% { transform: translateY(0px); }
-    }
+    /* different comet paths/durations */
+    .comet.c1 { animation: comet1 4s linear infinite 1s; }
+    .comet.c2 { animation: comet2 5.2s linear infinite 3s; width: 6px; height: 6px; opacity: 0.85; box-shadow: 0 0 6px rgba(255,255,255,0.9); }
+    .comet.c3 { animation: comet3 6s linear infinite 5s; width: 7px; height: 7px; opacity: 0.9; box-shadow: 0 0 7px rgba(255,255,255,0.9); }
 
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    @keyframes comet1 {
+      0% { transform: translate(-20vw, -10vh) rotate(-18deg) scale(0.9); opacity: 0; }
+      5% { opacity: 1; }
+      100% { transform: translate(120vw, 110vh) rotate(-18deg) scale(0.9); opacity: 0; }
+    }
+    @keyframes comet2 {
+      0% { transform: translate(-10vw, -5vh) rotate(-22deg) scale(1); opacity: 0; }
+      6% { opacity: 1; }
+      100% { transform: translate(130vw, 95vh) rotate(-22deg) scale(1); opacity: 0; }
+    }
+    @keyframes comet3 {
+      0% { transform: translate(-30vw, -20vh) rotate(-14deg) scale(1.05); opacity: 0; }
+      7% { opacity: 1; }
+      100% { transform: translate(110vw, 120vh) rotate(-14deg) scale(1.05); opacity: 0; }
     }
 
     /* ===== CARD ===== */
@@ -91,108 +187,70 @@
       border: 1px solid #ff6600;
       animation: fadeIn 0.8s ease-in-out;
       z-index: 2;
+      position: relative;
     }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    h1 { font-size: 26px; color: #ff6600; margin-bottom: 10px; }
+    h2 { font-size: 18px; color: #ccc; margin-bottom: 25px; }
 
-    h1 {
-      font-size: 26px;
-      color: #ff6600;
-      margin-bottom: 10px;
-    }
+    .section { background: #111; border-radius: 10px; padding: 15px; margin-bottom: 25px; text-align: left; border-left: 4px solid #ff6600; }
+    .section h3 { color: #ff6600; margin-bottom: 10px; font-size: 18px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+    .subsection { margin-top: 10px; background: #181818; border-radius: 8px; padding: 10px 15px; }
+    .subsection h4 { color: #ff8533; margin-bottom: 8px; font-size: 15px; border-bottom: 1px dashed #333; padding-bottom: 4px; }
 
-    h2 {
-      font-size: 18px;
-      color: #ccc;
-      margin-bottom: 25px;
-    }
+    .btn { display: inline-block; width: 100%; background: #ff6600; color: #fff; border: none; padding: 10px; font-size: 14px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.3s; text-align: center; text-decoration: none; margin-bottom: 6px; }
+    .btn:hover { background: #ff8533; transform: scale(1.05); }
+    .btn.alt { background: #333; border: 1px solid #ff6600; }
+    .btn.alt:hover { background: #444; }
 
-    .section {
-      background: #111;
-      border-radius: 10px;
-      padding: 15px;
-      margin-bottom: 25px;
-      text-align: left;
-      border-left: 4px solid #ff6600;
-    }
+    footer { margin-top: 20px; font-size: 14px; color: #999; opacity: 0.9; text-align: center; z-index: 2; }
 
-    .section h3 {
-      color: #ff6600;
-      margin-bottom: 10px;
-      font-size: 18px;
-      border-bottom: 1px solid #333;
-      padding-bottom: 5px;
-    }
-
-    .subsection {
-      margin-top: 10px;
-      background: #181818;
-      border-radius: 8px;
-      padding: 10px 15px;
-    }
-
-    .subsection h4 {
-      color: #ff8533;
-      margin-bottom: 8px;
-      font-size: 15px;
-      border-bottom: 1px dashed #333;
-      padding-bottom: 4px;
-    }
-
-    .btn {
-      display: inline-block;
-      width: 100%;
+    /* ===== BOTÃO FLUTUANTE FIXO ===== */
+    .floating-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
       background: #ff6600;
       color: #fff;
-      border: none;
-      padding: 10px;
-      font-size: 14px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: 0.3s;
-      text-align: center;
+      padding: 14px 18px;
+      border-radius: 50%;
+      font-size: 20px;
       text-decoration: none;
-      margin-bottom: 6px;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.45);
+      transition: 0.3s;
+      z-index: 6;
     }
+    .floating-btn:hover { transform: scale(1.15); background: #ff8533; }
 
-    .btn:hover {
-      background: #ff8533;
-      transform: scale(1.05);
-    }
-
-    .btn.alt {
-      background: #333;
-      border: 1px solid #ff6600;
-    }
-
-    .btn.alt:hover {
-      background: #444;
-    }
-
-    footer {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #999;
-      opacity: 0.9;
-      text-align: center;
-      z-index: 2;
+    /* responsive tweaks */
+    @media (max-width: 480px) {
+      .planet.p3 { display: none; } /* hide big planet on tiny screens */
+      .card { width: 92%; padding: 20px; }
     }
 
   </style>
 </head>
 <body>
 
-  <!-- PLANETAS NO FUNDO -->
-  <div class="background-planets">
+  <!-- ESTRELAS -->
+  <div class="stars" id="stars"></div>
+
+  <!-- VIA LÁCTEA -->
+  <div class="milkyway" aria-hidden="true"></div>
+
+  <!-- PLANETAS -->
+  <div class="background-planets" aria-hidden="true">
     <div class="planet p1 orbit"></div>
     <div class="planet p2"></div>
     <div class="planet p3 orbit"></div>
     <div class="planet p4"></div>
   </div>
+
+  <!-- COMETAS -->
+  <div class="comet c1" aria-hidden="true"></div>
+  <div class="comet c2" aria-hidden="true"></div>
+  <div class="comet c3" aria-hidden="true"></div>
 
   <div class="card">
     <h1>Downloads Suporte</h1>
@@ -210,30 +268,21 @@
     <!-- REMOTOS -->
     <div class="section">
       <h3>🛰️ Remotos</h3>
-
       <div class="subsection">
         <h4>⬇️ Ferramentas de Acesso Remoto</h4>
-
-        <a class="btn" href="https://download.anydesk.com/AnyDesk.exe" target="_blank">
-          AnyDesk (Download Direto)
-        </a>
-
-        <a class="btn alt" href="https://download.teamviewer.com/download/TeamViewer_Setup_x64.exe" target="_blank">
-          TeamViewer (Download Direto)
-        </a>
+        <a class="btn" href="https://download.anydesk.com/AnyDesk.exe" target="_blank">AnyDesk (Download Direto)</a>
+        <a class="btn alt" href="https://download.teamviewer.com/download/TeamViewer_Setup_x64.exe" target="_blank">TeamViewer (Download Direto)</a>
       </div>
     </div>
 
     <!-- TDP -->
     <div class="section">
       <h3>🧩 TDP</h3>
-
       <div class="subsection">
         <h4>⬇️ Instaladores</h4>
         <a class="btn" href="https://tdpinformatica.com.br/Download/Dist/Instalador_v48010.exe" target="_blank">Instalador</a>
         <a class="btn alt" href="https://tdpinformatica.com.br/Download/Dist/Atualizador_v48010.exe" target="_blank">Atualizador</a>
       </div>
-
       <div class="subsection">
         <h4>🔄 Site TDP</h4>
         <a class="btn" href="https://tdp.com.br/download/" target="_blank">Geral</a>
@@ -243,13 +292,11 @@
     <!-- HOS -->
     <div class="section">
       <h3>🏥 HOS</h3>
-
       <div class="subsection">
         <h4>⬇️ Instaladores</h4>
         <a class="btn" href="https://trocaweb.s3.us-east-2.amazonaws.com/1.%20Útil/Instaladores/HOS%20v8/Servidor_HOS_v8.exe" target="_blank">Servidor</a>
         <a class="btn alt" href="https://trocaweb.s3.us-east-2.amazonaws.com/1.%20Útil/Instaladores/HOS%20v8/Estação_HOS_v8.exe" target="_blank">Estação</a>
       </div>
-
       <div class="subsection">
         <h4>🔄 Atualizadores</h4>
         <a class="btn" href="https://trocaweb.s3.us-east-2.amazonaws.com/1.%20Útil/Instaladores/HOS%20v8/Atualizador_HOS_v8.exe" target="_blank">Atualizador Completo</a>
@@ -258,9 +305,25 @@
 
   </div>
 
-  <footer>
-    Loja Soluções - Kauê G. © 2025
-  </footer>
+  <footer>Loja Soluções - Kauê G. © 2025</footer>
+
+
+  <!-- small JS: gerar estrelas -->
+  <script>
+    const starsEl = document.getElementById('stars');
+    const starCount = 100;
+    for (let i=0;i<starCount;i++){
+      const s = document.createElement('div');
+      s.className = 'star';
+      s.style.left = (Math.random()*100).toFixed(2) + 'vw';
+      s.style.top = (Math.random()*100).toFixed(2) + 'vh';
+      s.style.width = (Math.random()*2 + 1) + 'px';
+      s.style.height = s.style.width;
+      s.style.animationDuration = (1.5 + Math.random()*3) + 's';
+      s.style.opacity = (0.05 + Math.random()*0.6).toString();
+      starsEl.appendChild(s);
+    }
+  </script>
 
 </body>
 </html>
